@@ -198,27 +198,17 @@ export function CreatePostPage() {
 // Edit page
 export function EditPostPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: postsData, isLoading } = useQuery({
-    queryKey: ["admin-posts-all"],
-    queryFn: () => fetch("/api/admin/posts?limit=1000").then((r) => r.json()),
-  });
-
-  if (isLoading) return <p className="text-muted-foreground">Loading...</p>;
-
-  const post = postsData?.posts?.find((p: Post) => p._id === id);
-  if (!post) return <p className="text-muted-foreground">Post not found</p>;
-
-  // We need full content – fetch the individual post by making a direct fetch
-  return <EditPostInner postId={id!} />;
+  if (!id) return <p className="text-muted-foreground">Invalid post ID</p>;
+  return <EditPostInner postId={id} />;
 }
 
 function EditPostInner({ postId }: { postId: string }) {
   const { data: post, isLoading } = useQuery({
     queryKey: ["admin-post-detail", postId],
     queryFn: async () => {
-      const res = await fetch(`/api/admin/posts?limit=1000`);
-      const data = await res.json();
-      return data.posts.find((p: Post) => p._id === postId);
+      const res = await fetch(`/api/admin/posts/${postId}`);
+      if (!res.ok) throw new Error("Failed to fetch post");
+      return res.json();
     },
   });
 
