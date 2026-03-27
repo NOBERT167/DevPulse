@@ -23,7 +23,7 @@ Category: ${category || "Tech"}
 Format the response as JSON with these fields:
 - title: A compelling blog title
 - excerpt: A 1-2 sentence summary (max 200 chars)
-- content: The full blog post in HTML format with proper headings, paragraphs, and code blocks where appropriate
+- content: The full blog post in Markdown format with proper headings, paragraphs, and code blocks where appropriate
 - tags: An array of 3-5 relevant tags`;
 
     const apiKey = process.env.OPENAI_API_KEY;
